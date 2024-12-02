@@ -1,15 +1,50 @@
-import { createContext } from "react";
+import { createContext, useMemo, useReducer, useContext } from 'react';
 
-export const initialState = {theme: "", data: []}
+export const initialState = { theme: 'light', data: [] };
 
 export const ContextGlobal = createContext(undefined);
 
-export const ContextProvider = ({ children }) => {
-  //Aqui deberan implementar la logica propia del Context, utilizando el hook useMemo
+// Define reducer for state management
+const reducer = (state, action) => {
+	switch (action.type) {
+		case 'TOGGLE_THEME':
+			const newTheme = state.theme === 'light' ? 'dark' : 'light';
+			localStorage.setItem('theme', newTheme);
+			return { ...state, theme: newTheme };
 
-  return (
-    <ContextGlobal.Provider value={{}}>
-      {children}
-    </ContextGlobal.Provider>
-  );
+		case 'SET_DATA':
+      
+			return { ...state, data: action.payload };
+
+		default:
+			return state;
+	}
+};
+
+export const ContextProvider = ({ children }) => {
+	// Initialize reducer with persisted theme from localStorage
+	const [state, dispatch] = useReducer(reducer, {
+		...initialState,
+		theme: localStorage.getItem('theme') || 'light',
+	});
+
+	// Memoize context value to prevent unnecessary re-renders
+	const contextValue = useMemo(() => {
+		return {
+			state,
+			toggleTheme: () => dispatch({ type: 'TOGGLE_THEME' }),
+			setData: (data) => dispatch({ type: 'SET_DATA', payload: data }),
+		};
+	}, [state]);
+
+	return <ContextGlobal.Provider value={contextValue}>{children}</ContextGlobal.Provider>;
+};
+
+// Custom hook for using the context
+export const useGlobalContext = () => {
+	const context = useContext(ContextGlobal);
+	if (context === undefined) {
+		throw new Error('useGlobalContext must be used within a ContextProvider');
+	}
+	return context;
 };
