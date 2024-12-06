@@ -42,9 +42,6 @@ const Detail = () => {
 				<p>Email: {dentist.email}</p>
 				<p>Phone: {dentist.phone}</p>
 				<p>Website: {dentist.website}</p>
-				<button onClick={() => toggleFavorite(dentist)}>
-					{favorites.some((fav) => fav.id === dentist.id) ? 'Remove from favorites' : 'Add to favorites'}
-				</button>
 			</div>
 		</div>
 	);
