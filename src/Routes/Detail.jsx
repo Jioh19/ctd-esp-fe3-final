@@ -37,7 +37,7 @@ const Detail = () => {
 			<div className="detail-container">
 				<div className="detail-card">
 					<div className="detail-header">
-						<img src="../../public/images/doctor.jpg" alt={`Dr. ${dentist.name}`} className="detail-image" />
+						<img src="/images/doctor.jpg" alt={`Dr. ${dentist.name}`} className="detail-image" />
 						<h1>Dr. {dentist.name}</h1>
 						<button onClick={() => toggleFavorite(parseInt(id))} className="detail-favorite-btn">
 							{favorites.includes(parseInt(id)) ? '❤️' : '🤍'}
