@@ -1,6 +1,11 @@
-import { createContext, useMemo, useReducer, useContext } from 'react';
+import { createContext, useMemo, useReducer, useContext, useEffect } from 'react';
 
-export const initialState = { theme: 'light', data: [] };
+export const initialState = {
+	theme: 'light',
+	data: [],
+	dentists: [],
+	favorites: [],
+};
 
 export const ContextGlobal = createContext(undefined);
 
@@ -12,9 +17,21 @@ const reducer = (state, action) => {
 			localStorage.setItem('theme', newTheme);
 			return { ...state, theme: newTheme };
 
-		case 'SET_DATA':
-      
-			return { ...state, data: action.payload };
+		case 'SET_DENTISTS':
+			return {
+				...state,
+				dentists: action.payload,
+			};
+
+		case 'TOGGLE_FAVORITE':
+			const updatedFavorites = state.favorites.includes(action.payload)
+				? state.favorites.filter((id) => id !== action.payload)
+				: [...state.favorites, action.payload];
+			localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+			return {
+				...state,
+				favorites: updatedFavorites,
+			};
 
 		default:
 			return state;
@@ -22,11 +39,19 @@ const reducer = (state, action) => {
 };
 
 export const ContextProvider = ({ children }) => {
-	// Initialize reducer with persisted theme from localStorage
+	// Initialize reducer with persisted theme and favorites from localStorage
 	const [state, dispatch] = useReducer(reducer, {
 		...initialState,
 		theme: localStorage.getItem('theme') || 'light',
+		favorites: JSON.parse(localStorage.getItem('favorites') || '[]'),
 	});
+
+	// Fetch dentists on initial load
+	useEffect(() => {
+		fetch('https://jsonplaceholder.typicode.com/users')
+			.then((res) => res.json())
+			.then((data) => dispatch({ type: 'SET_DENTISTS', payload: data }));
+	}, []);
 
 	// Memoize context value to prevent unnecessary re-renders
 	const contextValue = useMemo(() => {
@@ -34,6 +59,9 @@ export const ContextProvider = ({ children }) => {
 			state,
 			toggleTheme: () => dispatch({ type: 'TOGGLE_THEME' }),
 			setData: (data) => dispatch({ type: 'SET_DATA', payload: data }),
+			dentists: state.dentists,
+			favorites: state.favorites,
+			toggleFavorite: (id) => dispatch({ type: 'TOGGLE_FAVORITE', payload: id }),
 		};
 	}, [state]);
 
