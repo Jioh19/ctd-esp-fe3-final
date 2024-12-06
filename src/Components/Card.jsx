@@ -8,11 +8,22 @@ const Card = ({ dentist }) => {
 
 	return (
 		<div className={`card ${state.theme}`}>
-			<Link to={`/dentista/${dentist.id}`}>
-				<h3>{dentist.name}</h3>
-				<p>{dentist.username}</p>
+			<button
+				onClick={() => toggleFavorite(dentist.id)}
+				className="favorite-btn"
+				aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}>
+				<span className="heart-icon">{isFavorite ? '❤️' : '🤍'}</span>
+			</button>
+
+			<Link to={`/dentista/${dentist.id}`} className="card-content">
+				<div className="card-image-container">
+					<img src="/public/images/doctor.jpg" alt={`Dr. ${dentist.name}`} className="card-image" />
+				</div>
+				<div className="card-body">
+					<h3 className="card-name">{dentist.name}</h3>
+					<p className="card-username">{dentist.username}</p>
+				</div>
 			</Link>
-			<button onClick={() => toggleFavorite(dentist.id)}>{isFavorite ? '❤️' : '🤍'}</button>
 		</div>
 	);
 };

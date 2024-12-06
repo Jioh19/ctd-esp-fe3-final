@@ -9,7 +9,7 @@ const Favs = () => {
 	const favoriteDentists = dentists.filter((dentist) => favorites.includes(dentist.id));
 
 	return (
-		<main className={`page-${state.theme}`}>
+		<main className={`favoritos page-${state.theme}`}>
 			<h1>Dentists Favs</h1>
 			<div className="card-grid">
 				{favoriteDentists.map((dentist) => (

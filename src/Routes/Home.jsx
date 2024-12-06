@@ -5,7 +5,7 @@ const Home = () => {
 	const { state, dentists } = useGlobalContext();
 
 	return (
-		<main className={`page-${state.theme}`}>
+		<main className={`home page-${state.theme}`}>
 			<h1>Nuestros Dentistas</h1>
 			<div className="card-grid">
 				{dentists.map((dentist) => (
