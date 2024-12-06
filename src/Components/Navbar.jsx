@@ -20,7 +20,7 @@ const Navbar = () => {
 			</ul>
 
 			<div className="themeToggle">
-				<button onClick={toggleTheme}>{state.theme === 'light' ? '🌙' : '☀️'}</button>
+				<button onClick={toggleTheme}>{state.theme === 'light' ? '☀️' : '🌙'}</button>
 			</div>
 		</nav>
 	);
