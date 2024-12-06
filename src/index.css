@@ -142,10 +142,6 @@ nav {
 	}
 }
 
-.contact {
-	padding-top: 4rem;
-}
-
 footer {
 	display: flex;
 	justify-content: center;
@@ -490,7 +486,7 @@ form {
 /* Contact page main container */
 .contact {
 	padding-top: 4rem;
-	min-height: 100vh;
+	min-height: calc(100vh - 4rem);
 }
 
 .contact-container {
